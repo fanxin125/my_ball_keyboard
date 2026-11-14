@@ -45,17 +45,26 @@
 		label = "LEFT_ENCODER";
 		a-gpios = <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
 		b-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-		/* 转一圈 24 格。
-		 * pulses-per-detent=1：每 1 个跳变就出一格。
-		 * filter-jump-compensate=0：A/B 同时变化（2 步跳变、方向不明）时
-		 *   直接丢弃，不再按「上一次的方向」补两格 —— 后者正是
-		 *   「向下滚却表现成向上」的根因（上游默认开着）。
-		 * 组合效果：有跳变的格子丢 0 行、正常格子的 2 个跳变各出 1 行，
-		 *   平均仍是每格 1 行，速度不变，但方向永远由真实跳变判定。
+		/* 转一圈 24 格，每格 2 个电信号跳变（A/B 各一次边沿）。
+		 *
+		 * pulses-per-detent = 2：凑够 2 个跳变才算一格 —— 转一格恰好出 1 次，
+		 *   这样「转一格 = 音量 +1 步」是精确的。
+		 *   （设成 1 会让每格出 2 次，快是快，但单格次数翻倍，无法精确调节）
+		 *
+		 * filter-jump-compensate = 1：A/B 两次采样之间同时变化（2 步跳变、
+		 *   方向无法从状态判断）时，按上一次的方向补两格。开着是为了不丢格。
+		 *   风险：刚反向时「上一次的方向」还是旧方向，会把这一格补成反方向，
+		 *   表现为「向下滚却向上」。
+		 *
+		 * filter-codir-guard-us = 10000：给上面那个补偿加时间门槛 ——
+		 *   距上次出格不足 10ms 时一律不补偿（不猜方向）。慢速转动每格远超
+		 *   10ms，补偿正常工作、方向也准；快速甩动时自动放弃猜测，宁可少滚
+		 *   也不反向。（驱动默认 3000us，太短，快速转动一样会猜）
 		 */
 		steps = <24>;
-		pulses-per-detent = <1>;
-		filter-jump-compensate = <0>;
+		pulses-per-detent = <2>;
+		filter-jump-compensate = <1>;
+		filter-codir-guard-us = <10000>;
 	};
 
 	right_encoder: encoder_right {
@@ -66,8 +75,9 @@
 		b-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
 		/* 同上，左右手策略保持一致 */
 		steps = <24>;
-		pulses-per-detent = <1>;
-		filter-jump-compensate = <0>;
+		pulses-per-detent = <2>;
+		filter-jump-compensate = <1>;
+		filter-codir-guard-us = <10000>;
 	};
 
 	sensors {
