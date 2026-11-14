@@ -45,9 +45,17 @@
 		label = "LEFT_ENCODER";
 		a-gpios = <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
 		b-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-		/* 转一圈 24 格；每格发 2 个信号（原版 ZMK 只支持 1，换 imhy123 v0.3 分支后支持）*/
+		/* 转一圈 24 格。
+		 * pulses-per-detent=1：每 1 个跳变就出一格。
+		 * filter-jump-compensate=0：A/B 同时变化（2 步跳变、方向不明）时
+		 *   直接丢弃，不再按「上一次的方向」补两格 —— 后者正是
+		 *   「向下滚却表现成向上」的根因（上游默认开着）。
+		 * 组合效果：有跳变的格子丢 0 行、正常格子的 2 个跳变各出 1 行，
+		 *   平均仍是每格 1 行，速度不变，但方向永远由真实跳变判定。
+		 */
 		steps = <24>;
-		pulses-per-detent = <2>;
+		pulses-per-detent = <1>;
+		filter-jump-compensate = <0>;
 	};
 
 	right_encoder: encoder_right {
@@ -56,9 +64,10 @@
 		label = "RIGHT_ENCODER";
 		a-gpios = <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
 		b-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-		/* 转一圈 24 格；每格发 2 个信号（原版 ZMK 只支持 1，换 imhy123 v0.3 分支后支持）*/
+		/* 同上，左右手策略保持一致 */
 		steps = <24>;
-		pulses-per-detent = <2>;
+		pulses-per-detent = <1>;
+		filter-jump-compensate = <0>;
 	};
 
 	sensors {
