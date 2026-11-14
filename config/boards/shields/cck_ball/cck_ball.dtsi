@@ -45,7 +45,9 @@
 		label = "LEFT_ENCODER";
 		a-gpios = <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
 		b-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-		steps = <12>;
+		/* 转一圈 24 格；每格发 2 个信号（原版 ZMK 只支持 1，换 imhy123 v0.3 分支后支持）*/
+		steps = <24>;
+		pulses-per-detent = <2>;
 	};
 
 	right_encoder: encoder_right {
@@ -54,13 +56,15 @@
 		label = "RIGHT_ENCODER";
 		a-gpios = <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
 		b-gpios = <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-		steps = <12>;
+		/* 转一圈 24 格；每格发 2 个信号（原版 ZMK 只支持 1，换 imhy123 v0.3 分支后支持）*/
+		steps = <24>;
+		pulses-per-detent = <2>;
 	};
 
 	sensors {
 		compatible = "zmk,keymap-sensors";
 		sensors = <&left_encoder &right_encoder>;
-		triggers-per-rotation = <10>;
+		triggers-per-rotation = <24>;   /* 与上面 steps 保持一致 */
 	};
 
     };
