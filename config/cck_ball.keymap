@@ -48,6 +48,15 @@
     };
 
     behaviors {
+        // S 键专用：按住即进狙击层（第4层），判定窗口比默认 &lt(200ms) 短得多
+        lt_sn: layer_tap_snipe {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <80>;     // 按住 80ms 就切 snipe，接近无感
+            quick-tap-ms = <200>;       // 200ms 内连按，强制当字母输出，保护打字
+            bindings = <&mo>, <&kp>;
+        };
     };
 
     keymap {
@@ -57,7 +66,7 @@
             bindings = <
 &kp ESC           &kp N1        &kp N2        &kp N3      &kp N4       &kp N5  &kp N6  &kp N7     &kp N8     &kp N9          &kp N0          &kp BACKSPACE
 &kp TAB           &kp Q         &kp W         &kp E       &kp R        &kp T   &kp Y   &kp U      &kp I      &kp O           &kp P           &kp BSLH
-&kp CAPSLOCK      &kp A         &lt 4 S         &kp D       &lt 3 F      &kp G   &kp H   &kp J      &kp K      &kp L           &kp SEMI        &kp SQT
+&kp CAPSLOCK      &kp A         &lt_sn 4 S      &kp D       &lt 3 F      &kp G   &kp H   &kp J      &kp K      &kp L           &kp SEMI        &kp SQT
 &kp LEFT_SHIFT    &kp Z         &kp X         &kp C       &kp V        &kp B   &kp N   &kp M      &kp COMMA  &kp DOT         &kp UP_ARROW    &kp FSLH
 &kp LEFT_CONTROL  &kp LEFT_WIN  &kp LEFT_ALT  &kp DELETE  &lt 5 SPACE  &mo 1   &mo 2   &kp SPACE  &kp ENTER  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW
             >;
