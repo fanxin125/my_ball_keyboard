@@ -48,13 +48,15 @@
     };
 
     behaviors {
-        // S 键专用：按住即进狙击层（第4层），判定窗口比默认 &lt(200ms) 短得多
+        // S 键专用：按住即进狙击层（第4层）
         lt_sn: layer_tap_snipe {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <80>;     // 按住 80ms 就切 snipe，接近无感
-            quick-tap-ms = <200>;       // 200ms 内连按，强制当字母输出，保护打字
+            tapping-term-ms = <150>;        // 200 -> 150，比默认快 25%
+            quick-tap-ms = <200>;           // 连按时强制当字母
+            require-prior-idle-ms = <200>;  // ★ 打字保护：200ms 内刚按过别的键，
+                                            //   本次一律当字母输出，绝不判 hold
             bindings = <&mo>, <&kp>;
         };
     };
