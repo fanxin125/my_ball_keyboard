@@ -82,7 +82,7 @@
             bindings = <
 &kp F12    &kp F1  &kp F2  &kp F3  &kp F4  &kp F5     &kp F6     &kp F7     &kp F8          &kp F9            &kp F10            &kp F11
 &kp TILDE  &kp Q   &none   &none   &none   &trans     &none      &none      &kp UNDERSCORE  &kp MINUS         &kp EQUAL          &kp PRINTSCREEN
-&kp GRAVE  &none   &none   &none   &none   &mkp MCLK  &mkp MCLK  &mkp RCLK  &kp K           &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans
+&kp GRAVE  &none   &mo 4   &none   &none   &mkp MCLK  &mkp MCLK  &mkp RCLK  &kp K           &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans
 &trans     &trans  &trans  &trans  &trans  &none      &none      &none      &trans          &trans            &kp PG_UP          &trans
 &trans     &trans  &trans  &trans  &trans  &trans     &mkp LCLK  &mkp RCLK  &trans          &kp HOME          &kp PG_DN          &kp END
             >;
